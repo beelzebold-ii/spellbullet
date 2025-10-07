@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "tTHm5FnZNxo=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\niko\\Misc Software\\Raylib CSharp\\Spellbullet\\Spellbullet.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\niko\\.nuget\\packages\\raylib-cs\\7.0.1\\raylib-cs.7.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
