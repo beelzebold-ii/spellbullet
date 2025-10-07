@@ -20,3 +20,4 @@ C:\Users\niko\Misc Software\Raylib CSharp\Spellbullet\obj\Debug\net9.0\refint\Sp
 C:\Users\niko\Misc Software\Raylib CSharp\Spellbullet\obj\Debug\net9.0\Spellbullet.pdb
 C:\Users\niko\Misc Software\Raylib CSharp\Spellbullet\obj\Debug\net9.0\Spellbullet.genruntimeconfig.cache
 C:\Users\niko\Misc Software\Raylib CSharp\Spellbullet\obj\Debug\net9.0\ref\Spellbullet.dll
+C:\Users\niko\Misc Software\Raylib CSharp\Spellbullet\obj\Debug\net9.0\Spellbullet.sourcelink.json
