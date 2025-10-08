@@ -7,6 +7,7 @@ using static Raylib_cs.Raylib;
 namespace Spellbullet;
 
 class Program{
+	//global variables will be listed as public static in the Program class
 	public static List<gObj> gameObject = new List<gObj>() { };
 	public static SB_Player playerObject = new SB_Player(0.0f,0.0f);
 	
@@ -18,7 +19,7 @@ class Program{
 		//init game variables
 		SetTraceLogLevel(TraceLogLevel.Debug);
 		
-		
+		AssetManager.Init();
 		
 		//main game loop
 		while(!WindowShouldClose()){
@@ -30,10 +31,16 @@ class Program{
 			
 			ClearBackground(Color.RayWhite);
 			
+			foreach(gObj obj in gameObject){
+				Screen.DrawObject(obj);
+			}
+			
 			EndDrawing();
 		}
 		
 		//program deinitialization
+		AssetManager.DeInit();
+		
 		CloseWindow();
 	}
 }

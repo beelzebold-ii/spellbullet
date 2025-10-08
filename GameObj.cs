@@ -18,6 +18,8 @@ abstract class gObj{
 	//position and velocity
 	public Vector2 pos = Vector2.Zero;
 	public Vector2 vel = Vector2.Zero;
+	//yaw angle
+	public double angle = 0.0;
 	
 	//whether or not to apply friction every tick
 	public virtual bool doFriction => true;
@@ -30,6 +32,13 @@ abstract class gObj{
 		pos = new Vector2(pox,poy);
 	}
 	
+	//state can be used by any object logic
+	protected int state = 0;
+	//when state tics == zero, the object will be notified with a virtual function.
+	protected int st_tics = 1;
+	//this is said function
+	protected virtual void NextState(int prevstate){}
+	
 	//and our ticker function
 	public virtual void Tick(){
 		//increment object's age
@@ -39,6 +48,25 @@ abstract class gObj{
 		pos += vel;
 		if(doFriction)
 			vel *= GLOBAL_FRICTION;
+		
+		//decrement state tics
+		if(st_tics==0){
+			st_tics--;
+			NextState(state);
+		}else{
+			st_tics--;
+		}
+	}
+	
+	//what Texture to use? "TNT1" will skip drawing the object
+	private string sprite = "TNT1";
+	public string Sprite{ get => sprite; }
+	protected void SetSprite(string spr){
+		if(!AssetManager.Textures.ContainsKey(spr)){
+			TraceLog(TraceLogLevel.Error,"GAMEOBJ: Attempted to SetSprite to invalid Texture " + spr);
+			return;
+		}
+		sprite = spr;
 	}
 }
 
@@ -50,6 +78,9 @@ abstract class eObj:gObj{
 	public int health{
 		get => objhp;
 		set{
+			if(value < objhp){
+				OnDamage(objhp - value);
+			}
 			objhp = value;
 			if(objhp <= 0){
 				Die();
@@ -90,4 +121,8 @@ abstract class eObj:gObj{
 		isdead = false;
 		objhp = reshealth;
 	}
+	
+	//virtual method called to notify the object when it takes damage
+	//calling this does NOT damage the object, only makes it pretend it was damaged
+	protected virtual void OnDamage(int dmg){}
 }
