@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Collections.Generic;
 
 using Raylib_cs;
 using static Raylib_cs.Raylib;
@@ -125,4 +126,56 @@ abstract class eObj:gObj{
 	//virtual method called to notify the object when it takes damage
 	//calling this does NOT damage the object, only makes it pretend it was damaged
 	protected virtual void OnDamage(int dmg){}
+	
+	//this object's inventory
+	public List<invObj> Inventory = new List<invObj>() { };
+	public invObj GiveInventory(string classname,int count = 1){
+		//ensure classname is of a valid invObj child class
+		classname = "Spellbullet." + classname;
+		Type invtype = null;
+		try{
+			invtype = Type.GetType(classname);
+		}catch(Exception e){
+			TraceLog(TraceLogLevel.Error,"GAMEOBJ: Attempted to give invalid invObj " + classname);
+			return null;
+		}
+		if(!invtype.IsSubclassOf(typeof(invObj)))
+			return null;
+		
+		//create and attach the item
+		invObj item = (invObj) Activator.CreateInstance(invtype,new Object[] {0.0f,0.0f,count});
+		item.AttachTo(this);
+		
+		return item;
+	}
+}
+
+// base class for inventory items
+//~===============================~
+abstract class invObj:gObj{
+	//the displayed name of the item
+	protected string tag = "";
+	public string Tag{ get => tag; }
+	
+	//whether or not the item is attached to an object's inventory
+	protected bool attached = false;
+	public bool Attached{ get => attached; }
+	protected eObj owner = null;
+	public void AttachTo(eObj who){
+		owner = who;
+		attached = true;
+		
+		owner.Inventory.Add(this);
+	}
+	
+	public int count;
+	
+	//constructor
+	public invObj(float pox,float poy,int num = 1) : base(pox,poy){
+		count = num;
+	}
+	
+	public override void Tick(){
+		base.Tick();
+	}
 }

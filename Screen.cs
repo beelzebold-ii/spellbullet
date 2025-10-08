@@ -11,6 +11,10 @@ class Screen{
 	public static void DrawObject(gObj o){
 		if(o.Sprite == "TNT1")
 			return;
+		
+		if(o is invObj && ((invObj)o).Attached)
+			return;
+		
 		Texture2D tex;
 		if(!AssetManager.Textures.TryGetValue(o.Sprite,out tex)){
 			TraceLog(TraceLogLevel.Error,"SCREEN: Texture \"" + o.Sprite + "\" not found");
