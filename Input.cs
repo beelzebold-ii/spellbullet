@@ -8,16 +8,27 @@ namespace Spellbullet;
 //input handling
 class Input{
 	public const float AxisEpsilon = 0.07f;
+	//keys and buttons for movement
+	public static KeyboardKey[] MoveKeys = new KeyboardKey[] { KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D };
+	public static GamepadButton[] MoveBtn = new GamepadButton[] { GamepadButton.LeftFaceUp, GamepadButton.LeftFaceDown, GamepadButton.LeftFaceLeft, GamepadButton.LeftFaceRight };
+	//key and button for picking up items from the floor
+	public static KeyboardKey PkupKey = KeyboardKey.Q;
+	public static GamepadButton PkupBtn = GamepadButton.RightFaceUp;
+	//key and button for exiting menus
+	public static KeyboardKey BackKey = KeyboardKey.Escape;
+	public static GamepadButton BackBtn = GamepadButton.RightFaceRight;
+	//key and button for opening inventory screen
+	public static KeyboardKey InvKey = KeyboardKey.E;
+	public static GamepadButton InvBtn = GamepadButton.MiddleLeft;
+	
 	public static Vector2 GetMovementVector(){
-		KeyboardKey[] movekeys = new KeyboardKey[] { KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D };
-		GamepadButton[] padkeys = new GamepadButton[] { GamepadButton.LeftFaceUp, GamepadButton.LeftFaceDown, GamepadButton.LeftFaceLeft, GamepadButton.LeftFaceRight };
 		Vector2[] movevecs = new Vector2[] { new Vector2(0.0f,-1.0f), new Vector2(0.0f,1.0f), new Vector2(-1.0f,0.0f), new Vector2(1.0f,0.0f) };
 		
 		Vector2 MoveVec = Vector2.Zero;
 		
 		//iterate keys and apply their vectors
 		for(int k = 0;k < 4;k++){
-			if(IsKeyDown(movekeys[k]) || IsGamepadButtonDown(0,padkeys[k])){
+			if(IsKeyDown(Input.MoveKeys[k]) || IsGamepadButtonDown(0,Input.MoveBtn[k])){
 				MoveVec += movevecs[k];
 			}
 		}
@@ -29,8 +40,8 @@ class Input{
 			MoveVec += AxisVector;
 		
 		//if vector length is zero normalizing will have weird results so just return as is
-		if(MoveVec.Length() == 0.0)
-			return MoveVec;
+		if(MoveVec.Length() < Input.AxisEpsilon)
+			return Vector2.Zero;
 		
 		//normalize the vector to a unit vector and return
 		if(MoveVec.Length() > 0.9)

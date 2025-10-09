@@ -154,7 +154,7 @@ abstract class eObj:gObj{
 //~===============================~
 abstract class invObj:gObj{
 	//the displayed name of the item
-	protected string tag = "";
+	protected virtual string tag => "";
 	public string Tag{ get => tag; }
 	
 	//whether or not the item is attached to an object's inventory
@@ -166,6 +166,8 @@ abstract class invObj:gObj{
 		attached = true;
 		
 		owner.Inventory.Add(this);
+		
+		Program.UnlinkObject(this);
 	}
 	
 	public int count;
