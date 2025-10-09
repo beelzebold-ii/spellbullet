@@ -21,6 +21,8 @@ class Program{
 		
 		AssetManager.Init();
 		
+		//new SubMachineGun(60.0f,-20.0f);
+		
 		//main game loop
 		while(!WindowShouldClose()){
 			foreach(gObj obj in gameObject){
@@ -29,11 +31,13 @@ class Program{
 			
 			BeginDrawing();
 			
-			ClearBackground(Color.RayWhite);
+			ClearBackground(Color.Black);
 			
 			foreach(gObj obj in gameObject){
 				Screen.DrawObject(obj);
 			}
+			
+			DrawText("" + GetGamepadAxisMovement(0,GamepadAxis.LeftX),0,0,20,Color.RayWhite);
 			
 			EndDrawing();
 		}

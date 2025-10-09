@@ -62,7 +62,7 @@ abstract class gObj{
 	//what Texture to use? "TNT1" will skip drawing the object
 	private string sprite = "TNT1";
 	public string Sprite{ get => sprite; }
-	protected void SetSprite(string spr){
+	public void SetSprite(string spr){
 		if(!AssetManager.Textures.ContainsKey(spr)){
 			TraceLog(TraceLogLevel.Error,"GAMEOBJ: Attempted to SetSprite to invalid Texture " + spr);
 			return;

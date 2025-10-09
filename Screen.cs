@@ -18,9 +18,10 @@ class Screen{
 		Texture2D tex;
 		if(!AssetManager.Textures.TryGetValue(o.Sprite,out tex)){
 			TraceLog(TraceLogLevel.Error,"SCREEN: Texture \"" + o.Sprite + "\" not found");
+			o.SetSprite("TNT1");
 			return;
 		}
 		Vector2 offset = new Vector2(tex.Width/2,tex.Height/2);
-		DrawTextureEx(tex,o.pos - Program.playerObject.Camera - offset,0.0f,1.0f,Color.White);
+		DrawTextureEx(tex,Vector2.Round(o.pos - Program.playerObject.Camera - offset),(float)o.angle,1.0f,Color.White);
 	}
 }
