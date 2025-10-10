@@ -1,4 +1,9 @@
-﻿using System.Numerics;
+﻿// SPELLBULLET
+// Spellweaving and gunslinging topdown shooter!
+// By yours truly, "Hellcat" Niko Chevrier
+// Future graphics hopefully by Minerva "YourLocalCreechur"/"Maladjusted"
+
+using System.Numerics;
 using System.Collections.Generic;
 
 using Raylib_cs;
@@ -29,7 +34,8 @@ class Program{
 	//objects slated for removal from the gameObject list
 	private static List<gObj> unlinkedObject = new List<gObj>() { };
 	
-	static void Main(){
+	//"public static void main deez nuts" - siveine
+	public static void Main(){
 		//init the window
 		InitWindow(800,450,"Spellbullet");
 		SetWindowMinSize(800,450);

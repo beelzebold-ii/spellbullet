@@ -161,6 +161,7 @@ abstract class invObj:gObj{
 	protected bool attached = false;
 	public bool Attached{ get => attached; }
 	protected eObj owner = null;
+	//method for attaching the item to an object which also unlinks them from the main game object list
 	public void AttachTo(eObj who){
 		owner = who;
 		attached = true;
@@ -170,11 +171,22 @@ abstract class invObj:gObj{
 		Program.UnlinkObject(this);
 	}
 	
+	//how many of the item?
 	public int count;
+	//how many of the item *can* there be?
+	public virtual int maxCount => 1;
 	
 	//constructor
-	public invObj(float pox,float poy,int num = 1) : base(pox,poy){
+	public invObj(float pox,float poy,int num = -1) : base(pox,poy){
 		count = num;
+		if(count == -1)
+			count = maxCount;
+		
+		//angle = GetRandomValue(-31415,31415)/10000.0d;
+		//fuck radians man
+		//angle *= 180.0d/3.14159d;
+		angle = GetRandomValue(-1800,1800)/10.0d;
+		System.Console.WriteLine("invObj angle set to " + angle);
 	}
 	
 	public override void Tick(){

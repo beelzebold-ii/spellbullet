@@ -17,7 +17,8 @@ abstract class Weapon:invObj{
 // and a test weapon
 class SubMachineGun:Weapon{
 	protected override string tag => "Submachinegun";
-	public SubMachineGun(float pox,float poy,int cnt = 30) : base(pox,poy,cnt){
+	public override int maxCount => 30;
+	public SubMachineGun(float pox,float poy,int cnt = -1) : base(pox,poy,cnt){
 		SetSprite("smsnb0");
 	}
 }
