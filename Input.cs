@@ -8,18 +8,38 @@ namespace Spellbullet;
 //input handling
 class Input{
 	public const float AxisEpsilon = 0.07f;
+	
+	//KEYBIND STUFF
+	public class ActionBind{
+		public KeyboardKey key;
+		public GamepadButton btn;
+		public MouseButton mou;
+		public ActionBind(KeyboardKey k = KeyboardKey.Null,GamepadButton b = GamepadButton.Unknown,int m = -1){
+			key = k;
+			btn = b;
+			if(m != -1)
+				mou = (MouseButton)m;
+		}
+	}
+	
 	//keys and buttons for movement
 	public static KeyboardKey[] MoveKeys = new KeyboardKey[] { KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D };
 	public static GamepadButton[] MoveBtn = new GamepadButton[] { GamepadButton.LeftFaceUp, GamepadButton.LeftFaceDown, GamepadButton.LeftFaceLeft, GamepadButton.LeftFaceRight };
-	//key and button for picking up items from the floor
-	public static KeyboardKey PkupKey = KeyboardKey.G;
-	public static GamepadButton PkupBtn = GamepadButton.RightFaceUp;
-	//key and button for exiting menus
-	public static KeyboardKey BackKey = KeyboardKey.Escape;
-	public static GamepadButton BackBtn = GamepadButton.RightFaceRight;
-	//key and button for opening inventory screen
-	public static KeyboardKey InvKey = KeyboardKey.E;
-	public static GamepadButton InvBtn = GamepadButton.MiddleLeft;
+	//bind for picking up items from the floor
+	public static ActionBind Grab = new ActionBind(KeyboardKey.Q,GamepadButton.RightFaceUp);
+	//bind for exiting menus
+	public static ActionBind Back = new ActionBind(KeyboardKey.Escape,GamepadButton.RightFaceRight);
+	//bind for opening inventory screen
+	public static ActionBind Inv = new ActionBind(KeyboardKey.E,GamepadButton.MiddleLeft);
+	//bind for firing weapon
+	public static ActionBind Fire = new ActionBind(KeyboardKey.Null,GamepadButton.RightTrigger2,(int)MouseButton.Left);
+	
+	public static bool CheckActionBind(ActionBind bind,bool hold = false){
+		if(hold)
+			return (IsKeyDown(bind.key) || IsGamepadButtonDown(0,bind.btn) || IsMouseButtonDown(bind.mou));
+		else
+			return (IsKeyPressed(bind.key) || IsGamepadButtonPressed(0,bind.btn) || IsMouseButtonPressed(bind.mou));
+	}
 	
 	public static Vector2 GetMovementVector(){
 		Vector2[] movevecs = new Vector2[] { new Vector2(0.0f,-1.0f), new Vector2(0.0f,1.0f), new Vector2(-1.0f,0.0f), new Vector2(1.0f,0.0f) };
