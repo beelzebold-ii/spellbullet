@@ -32,8 +32,11 @@ class Screen{
 			return;
 		}
 		Vector2 offset = new Vector2(tex.Width/2,tex.Height/2);
-		//this doesn't seem to be correctly rotating. so I am going to cry until it fixes itself
-		DrawTextureEx(tex, Vector2.Round(o.pos - Program.playerObject.Camera - offset), (float)o.angle, 1.0f, Color.White);
+		Vector2 drawpos = Vector2.Round(o.pos - Program.playerObject.Camera - offset);
+		Rectangle srect = new Rectangle(0, 0, tex.Width, tex.Height);
+		Rectangle drect = new Rectangle(drawpos.X, drawpos.Y, tex.Width, tex.Height);
+		//here offset, being the vector from corner to center, is exactly our rotation origin, so that's why that's there
+		DrawTexturePro(tex, srect, drect, offset, (float)o.angle, Color.White);
 		
 		if(o is invObj && CheckCollisionPointCircle(o.pos,Program.playerObject.pos,SB_Player.PickupRange)){
 			Vector2 txtpos = new Vector2(o.pos.X,o.pos.Y + offset.Y);

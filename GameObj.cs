@@ -69,6 +69,11 @@ abstract class gObj{
 		}
 		sprite = spr;
 	}
+	
+	//normalize angle to -180..180
+	public void NormalizeAngle(){
+		angle = ((angle + 180.0d) % 360.0d) - 180.0d;
+	}
 }
 
 // base class for "living" entities of any kind
@@ -186,6 +191,7 @@ abstract class invObj:gObj{
 		//fuck radians man
 		//angle *= 180.0d/3.14159d;
 		angle = GetRandomValue(-1800,1800)/10.0d;
+		NormalizeAngle();
 		System.Console.WriteLine("invObj angle set to " + angle);
 	}
 	

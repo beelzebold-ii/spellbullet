@@ -28,6 +28,10 @@ class SB_Player:eObj{
 		Vector2 MoveVec = Input.GetMovementVector();
 		vel += MoveVec;
 		
+		//for testing rotation
+		//angle += 1.0d;
+		//NormalizeAngle();
+		
 		base.Tick();
 		
 		
