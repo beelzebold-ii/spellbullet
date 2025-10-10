@@ -32,17 +32,25 @@ class Screen{
 			return;
 		}
 		Vector2 offset = new Vector2(tex.Width/2,tex.Height/2);
-		Vector2 drawpos = Vector2.Round(o.pos - Program.playerObject.Camera - offset);
+		//apparently the rotation origin parameter also offsets so we don't need to apply that offset here
+		Vector2 drawpos = Vector2.Round(o.pos - Program.playerObject.Camera/* - offset*/);
 		Rectangle srect = new Rectangle(0, 0, tex.Width, tex.Height);
 		Rectangle drect = new Rectangle(drawpos.X, drawpos.Y, tex.Width, tex.Height);
 		//here offset, being the vector from corner to center, is exactly our rotation origin, so that's why that's there
 		DrawTexturePro(tex, srect, drect, offset, (float)o.angle, Color.White);
 		
+		//draw nametag if o is invObj and near player pickuprange
 		if(o is invObj && CheckCollisionPointCircle(o.pos,Program.playerObject.pos,SB_Player.PickupRange)){
 			Vector2 txtpos = new Vector2(o.pos.X,o.pos.Y + offset.Y);
+			//txtpos = o.pos; //for debugging
 			txtpos = Vector2.Round(txtpos - Program.playerObject.Camera);
 			
 			DrawText("" + ((invObj)o).Tag,(int)txtpos.X,(int)txtpos.Y,10,Color.RayWhite);
+		}
+		
+		//draw collision radius if o is eObj
+		if(o is eObj){
+			DrawCircleLines((int)(drawpos.X),(int)(drawpos.Y),((eObj)o).radius,new Color(0x00,0x55,0x00,0xff));
 		}
 	}
 	

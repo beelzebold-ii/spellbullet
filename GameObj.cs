@@ -101,6 +101,14 @@ abstract class eObj:gObj{
 	private bool isdead = false;
 	public bool isDead{ get => isdead; }
 	
+	//the radius of the object, used for collisions. duh.
+	public abstract float radius{ get; }
+	//mass of the object, used for reaction forces
+	public abstract float mass{ get; }
+	
+	//the acceleration the object applies when moving
+	public abstract float speed{ get; }
+	
 	//constructor for eObjs; hopefully constructors for subclasses are not necessary, but if they are, all should be well
 	public eObj(float pox,float poy) : base(pox,poy){
 		objhp = spawnHealth;
@@ -108,6 +116,9 @@ abstract class eObj:gObj{
 	
 	//and our ticker function
 	public override void Tick(){
+		//check collision with everyone else if eligible
+		DoObjectCollision();
+		
 		base.Tick();
 	}
 	
@@ -131,6 +142,48 @@ abstract class eObj:gObj{
 	//virtual method called to notify the object when it takes damage
 	//calling this does NOT damage the object, only makes it pretend it was damaged
 	protected virtual void OnDamage(int dmg){}
+	
+	//collision checking, called once per tick
+	protected bool DoObjectCollision(bool applyForce = true){
+		bool returnval = false;
+		//if our radius and mass is above zero, check collision with every other eObj
+		if(radius > 0.0f && mass > 0.0f){
+			foreach(gObj obj in Program.gameObject){
+				if(obj == this)
+					continue;//no self collision
+				if(!(obj is eObj))
+					continue;//can't collide with non eObjs
+				eObj coll = (eObj)obj;
+				if(coll.radius <= 0.0f || coll.mass <= 0.0f)
+					continue;//can't collide if radius or mass zero
+				if(!CheckCollisionCircles(pos,radius,coll.pos,coll.radius))
+					continue;//obviously can't collide if we aren't touching
+				returnval = true;
+				if(!applyForce)
+					break;
+				//we are colliding; apply collision
+				//mass of the colliding entity in multiples of our own mass
+				float colmass = coll.mass / mass;
+				//calculate the proper displacement
+				Vector2 normal = Vector2.Normalize(pos - coll.pos);
+				//this has to take into account the second object's velocity as well oops
+				float sep = Vector2.Dot(vel - coll.vel,normal);
+				//actual ejection force applied to each
+				float force = sep / ((1 / mass) + (1 / coll.mass));
+				if(sep < 0.0f){
+					coll.vel += (force / coll.mass) * normal;
+					vel -= (force / mass) * normal;
+					//force position out to the right distance to avoid phasing; since this is inside if(sep < 0.0f) it shouldn't cause clinging
+					Vector2 collisionCenter = (pos + coll.pos) / 2.0f;
+					float averageRadius = (radius + coll.radius) / 2.0f;
+					coll.pos = collisionCenter - (normal * averageRadius);
+					pos = collisionCenter + (normal * averageRadius);
+				}
+			}
+		}
+		
+		return returnval;
+	}
 	
 	//this object's inventory
 	public List<invObj> Inventory = new List<invObj>() { };

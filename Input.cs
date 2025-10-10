@@ -12,7 +12,7 @@ class Input{
 	public static KeyboardKey[] MoveKeys = new KeyboardKey[] { KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D };
 	public static GamepadButton[] MoveBtn = new GamepadButton[] { GamepadButton.LeftFaceUp, GamepadButton.LeftFaceDown, GamepadButton.LeftFaceLeft, GamepadButton.LeftFaceRight };
 	//key and button for picking up items from the floor
-	public static KeyboardKey PkupKey = KeyboardKey.Q;
+	public static KeyboardKey PkupKey = KeyboardKey.G;
 	public static GamepadButton PkupBtn = GamepadButton.RightFaceUp;
 	//key and button for exiting menus
 	public static KeyboardKey BackKey = KeyboardKey.Escape;

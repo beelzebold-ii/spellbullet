@@ -27,9 +27,12 @@ class Program{
 	}
 	public static MenuState Menu = MenuState.None;
 	
+	//if the audio device is ready or not
+	public static bool AudioReady = false;
+	
 	//objects
 	public static List<gObj> gameObject = new List<gObj>() { };
-	public static SB_Player playerObject = new SB_Player(0.0f,0.0f);
+	public static SB_Player playerObject = null;
 	
 	//objects slated for removal from the gameObject list
 	private static List<gObj> unlinkedObject = new List<gObj>() { };
@@ -41,7 +44,10 @@ class Program{
 		SetWindowMinSize(800,450);
 		SetWindowState(ConfigFlags.ResizableWindow);
 		SetTargetFPS(60);
-		SetExitKey(KeyboardKey.F11);
+		SetExitKey(KeyboardKey.Null);
+		
+		InitAudioDevice();
+		AudioReady = IsAudioDeviceReady();
 		
 		//init game variables
 		SetTraceLogLevel(TraceLogLevel.Debug);
@@ -49,7 +55,10 @@ class Program{
 		AssetManager.Init();
 		Screen.Init();
 		
-		new SubMachineGun(60.0f,-20.0f);
+		playerObject = new SB_Player(0.0f,0.0f);
+		
+		new TestGun(120.0f,-20.0f);
+		new SB_TestEnemy(260.0f,0.0f);
 		
 		//main game loop
 		while(!WindowShouldClose()){
@@ -99,6 +108,7 @@ class Program{
 					}
 					break;
 				}
+				
 				break;
 			}
 			BeginTextureMode(Screen.ScreenCanvas[1]);
@@ -111,6 +121,8 @@ class Program{
 		//program deinitialization
 		Screen.DeInit();
 		AssetManager.DeInit();
+		
+		CloseAudioDevice();
 		
 		CloseWindow();
 	}

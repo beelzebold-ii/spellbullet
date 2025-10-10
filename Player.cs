@@ -9,6 +9,9 @@ namespace Spellbullet;
 //~==================~
 class SB_Player:eObj{
 	public override int spawnHealth => 100;
+	public override float radius => 22;
+	public override float mass => 50;
+	public override float speed => 0.66f;
 	
 	public const float PickupRange = 32.0f;
 	public const int MaxInventory = 6;
@@ -19,16 +22,16 @@ class SB_Player:eObj{
 	
 	//apparently empty constructors are still needed because the base constructor takes required arguments.
 	public SB_Player(float pox,float poy) : base(pox,poy){
-		SetSprite("swordforniko");
+		SetSprite("player");
 	}
 	
 	public override void Tick(){
 		camera = pos - new Vector2(400,225);
 		
 		Vector2 MoveVec = Input.GetMovementVector();
-		vel += MoveVec;
+		vel += MoveVec * speed;
 		
-		//for testing rotation
+		//was just for testing rotation
 		//angle += 1.0d;
 		//NormalizeAngle();
 		
