@@ -18,7 +18,7 @@ class SB_TestEnemy:eObj{
 	
 	public override void Tick(){
 		Vector2 MoveVec = Vector2.Normalize(Program.playerObject.pos - pos);
-		vel += MoveVec * speed;
+		//vel += MoveVec * speed;
 		
 		base.Tick();
 	}

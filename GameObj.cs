@@ -245,7 +245,6 @@ abstract class invObj:gObj{
 		//angle *= 180.0d/3.14159d;
 		angle = GetRandomValue(-1800,1800)/10.0d;
 		NormalizeAngle();
-		System.Console.WriteLine("invObj angle set to " + angle);
 	}
 	
 	public override void Tick(){

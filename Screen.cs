@@ -54,6 +54,47 @@ class Screen{
 		}
 	}
 	
+	//hitscan lines
+	public class HitscanLine{
+		public int tics;
+		public Vector2 p1;
+		public Vector2 p2;
+		
+		public HitscanLine(Vector2 a,Vector2 b){
+			p1 = a;
+			p2 = b;
+			tics = 15;
+			
+			Program.hscanLines.Add(this);
+		}
+	}
+	public static void DrawHitscanLine(HitscanLine todraw){
+		if(todraw.tics <= 0)
+			return;
+		DrawLineV(todraw.p1 - Program.playerObject.Camera,todraw.p2 - Program.playerObject.Camera,
+			new Color(0xff,0xaa,0x33,(int)(System.Math.Clamp(todraw.tics / 9.0f * 255.0f,0.0f,200.0f))));
+	}
+	
+	//draw menu stuff
+	public static void DrawGameMenu(MenuScreen gmenu){
+		foreach(MenuScreen.Button btn in gmenu.buttons){
+			//draw texture
+			if(btn.texture != "TNT1"){
+				Texture2D tex;
+				if(!AssetManager.Textures.TryGetValue(btn.texture,out tex)){
+					TraceLog(TraceLogLevel.Error,"SCREEN: Texture \"" + btn.texture + "\" not found");
+					btn.texture = "TNT1";
+					continue;
+				}
+				DrawTextureEx(tex, (btn.position + (btn.size/2.0f)) - (new Vector2(tex.Width / 2,tex.Height / 2) * btn.texscale), 0.0f, btn.texscale, btn.col);
+			}
+			//draw text
+			if(btn.txtlabel != ""){
+				DrawText(btn.txtlabel,(int)btn.position.X,(int)btn.position.Y,btn.txtsize,btn.col);
+			}
+		}
+	}
+	
 	//present what's on the rendertexture to the window
 	public static void Flip(int i = 1,bool doscale = true){
 		Vector2 position = Vector2.Zero;

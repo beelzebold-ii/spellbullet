@@ -17,7 +17,7 @@ class SB_Player:eObj{
 	public const int MaxInventory = 6;
 	
 	//weapon stuff
-	protected Weapon ReadyWeapon = null;
+	public Weapon ReadyWeapon = null;
 	public int fireDelay = 0;
 	public float recoil = 0.0f;
 	
@@ -28,7 +28,7 @@ class SB_Player:eObj{
 	//apparently empty constructors are still needed because the base constructor takes required arguments.
 	public SB_Player(float pox,float poy) : base(pox,poy){
 		SetSprite("player");
-		ReadyWeapon = new TestGun(0.0f,0.0f);
+		ReadyWeapon = new SubMachinegun(0.0f,0.0f);
 		ReadyWeapon.AttachTo(this);
 	}
 	
@@ -42,6 +42,11 @@ class SB_Player:eObj{
 		//angle += 1.0d;
 		//NormalizeAngle();
 		
+		//TURN TOWARDS MOUSE
+		angle = Input.GetAimAngle();
+		NormalizeAngle();
+		
+		//HANDLE WEAPON DELAY AND RECOIL
 		if(fireDelay > 0)
 			fireDelay--;
 		if(ReadyWeapon != null){
@@ -83,14 +88,17 @@ class SB_Player:eObj{
 		if(Input.CheckActionBind(Input.Inv)){
 			if(Program.Menu == Program.MenuState.None){
 				Program.Menu = Program.MenuState.Inventory;
+				Program.MScreen = new InventoryMenu();
 			}else if(Program.Menu == Program.MenuState.Inventory){
 				Program.Menu = Program.MenuState.None;
+				Program.MScreen = new MenuScreen();
 			}
 		}
 		//EXIT MENUS
 		if(Input.CheckActionBind(Input.Back)){
 			if(Program.Menu != Program.MenuState.None){
 				Program.Menu = Program.MenuState.None;
+				Program.MScreen = new MenuScreen();
 			}
 		}
 	}

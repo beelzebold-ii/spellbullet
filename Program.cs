@@ -26,6 +26,7 @@ class Program{
 		Pause
 	}
 	public static MenuState Menu = MenuState.None;
+	public static MenuScreen MScreen = new MenuScreen();
 	
 	//if the audio device is ready or not
 	public static bool AudioReady = false;
@@ -37,9 +38,15 @@ class Program{
 	//objects slated for removal from the gameObject list
 	private static List<gObj> unlinkedObject = new List<gObj>() { };
 	
+	//hitscan lines to be drawn
+	public static List<Screen.HitscanLine> hscanLines = new List<Screen.HitscanLine>() { };
+	//to be unlinked
+	private static List<Screen.HitscanLine> unlinkedLines = new List<Screen.HitscanLine>() { };
+	
 	//"public static void main deez nuts" - siveine
 	public static void Main(){
 		//init the window
+		SetTraceLogLevel(TraceLogLevel.Debug);
 		InitWindow(800,450,"Spellbullet");
 		SetWindowMinSize(800,450);
 		SetWindowState(ConfigFlags.ResizableWindow);
@@ -49,9 +56,9 @@ class Program{
 		InitAudioDevice();
 		AudioReady = IsAudioDeviceReady();
 		
-		//init game variables
-		SetTraceLogLevel(TraceLogLevel.Debug);
+		Haptic.GetController();
 		
+		//init game variables
 		AssetManager.Init();
 		Screen.Init();
 		
@@ -62,6 +69,9 @@ class Program{
 		
 		//main game loop
 		while(!WindowShouldClose()){
+			//for haptics to update
+			SDL.SDL_PumpEvents();
+			
 			switch(Gamestate){
 			default:
 			case State.Game:
@@ -73,6 +83,9 @@ class Program{
 					gameObject.Remove(obj);
 				}
 				unlinkedObject = new List<gObj>() { };
+				//check menu button input
+				ButtonPress menubtn = MScreen.CheckButtonClick();
+				Input.ProcessMenuClick(menubtn);
 				break;
 			}
 			
@@ -86,28 +99,53 @@ class Program{
 			default:
 			case State.Game:
 			// GAME DRAW
+				//draw HITSCANS
+				foreach(Screen.HitscanLine todraw in hscanLines){
+					if(todraw.tics <= 0){
+						unlinkedLines.Add(todraw);
+						continue;
+					}
+					Screen.DrawHitscanLine(todraw);
+					todraw.tics--;
+				}
+				//unlink HITSCANS
+				foreach(Screen.HitscanLine toremove in unlinkedLines){
+					hscanLines.Remove(toremove);
+				}
+				unlinkedLines = new List<Screen.HitscanLine>() { };
 				//draw OBJECTS
 				foreach(gObj obj in gameObject){
 					if(obj != playerObject)
 						Screen.DrawObject(obj);
 				}
+				//draw PLAYER CONE OF FIRE
+				if(playerObject.ReadyWeapon != null){
+					double spread = playerObject.ReadyWeapon.spread * (1.0d + playerObject.recoil);
+					DrawCircleSector(playerObject.pos - playerObject.Camera,600.0f,
+						(float)(playerObject.angle - spread) - 90.0f,(float)(playerObject.angle + spread) - 90.0f,
+						2,new Color(0x66,0x33,0x33,0x44));
+				}
+				//draw PLAYER
 				Screen.DrawObject(playerObject);
 				
-				//draw MENUS
-				switch(Menu){
-				default:
-				case MenuState.None:
-					break;
-				case MenuState.Inventory:
-				// INVENTORY DRAW
-					int i = 0;
-					DrawText("INVENTORY",0,0,20,Color.RayWhite);
-					foreach(invObj item in playerObject.Inventory){
-						i++;
-						DrawText("" + item.Tag + " (" + item.count + ")",10,15 * i + 5,15,Color.RayWhite);
-					}
-					break;
+				// THE HEADS UP DISPLAY
+				//~=====================~
+				//draw WEAPON
+				if(playerObject.ReadyWeapon != null){
+					DrawText("WEAPON",0,380,10,Color.RayWhite);
+					DrawText("" + playerObject.ReadyWeapon.Tag,10,390,20,Color.RayWhite);
+					Color ammocolor = Color.Orange;
+					if(playerObject.ReadyWeapon.count <= playerObject.ReadyWeapon.maxCount / 3)
+						ammocolor = new Color(0xff,0x00,0x00,0xff);
+					if(playerObject.ReadyWeapon.count == 0)
+						ammocolor = Color.Gray;
+					DrawText("" + playerObject.ReadyWeapon.count + "/" +  playerObject.ReadyWeapon.maxCount,15,410,20,ammocolor);
 				}
+				
+				//draw MENUS
+				if(Menu == MenuState.Inventory)
+					MScreen = new InventoryMenu();
+				Screen.DrawGameMenu(MScreen);
 				
 				break;
 			}
@@ -119,6 +157,8 @@ class Program{
 		}
 		
 		//program deinitialization
+		Haptic.ShutdownSDL();
+		
 		Screen.DeInit();
 		AssetManager.DeInit();
 		
