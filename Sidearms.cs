@@ -34,6 +34,20 @@ class Pistol9mm:Weapon{
 		
 		return 4;//800r/m;20r/s - if only it were cyclic
 	}
+	public override int Reload(){
+		switch(DoReload()){
+			default:
+			case 0:
+				return 1;
+				break;
+			case 1:
+				return 25;
+				break;
+			case 2:
+				return 40;
+				break;
+		}
+	}
 }
 
 // REVOLVER
@@ -63,5 +77,19 @@ class Revolver:Weapon{
 		ApplyRecoil();
 		
 		return 10;//535r/m;6r/s
+	}
+	public override int Reload(){
+		switch(DoReload()){
+			default:
+			case 0:
+				return 1;
+				break;
+			case 1:
+				return 45;
+				break;
+			case 2:
+				return 50;
+				break;
+		}
 	}
 }

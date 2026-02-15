@@ -33,4 +33,18 @@ class SubMachinegun:Weapon{
 		
 		return 5;//720r/m;12r/s
 	}
+	public override int Reload(){
+		switch(DoReload()){
+			default:
+			case 0:
+				return 1;
+				break;
+			case 1:
+				return 27;
+				break;
+			case 2:
+				return 45;
+				break;
+		}
+	}
 }
