@@ -1,5 +1,5 @@
 # Spellbullet
-Hello! I am niko. if you are not niko then this repo has nothing for you. This project exists only very nebulously split across a love2d project and a raylib project.
+Hello! I am niko. if you are not niko then this repo has nothing for you. This project exists only very nebulously split across a love2d project and two raylib projects.
 
 Spellbullet [ is/was/will be ] a spellweaving and gunning topdown shooter roguelike/lite involving various guns, various magical spells, and demonic and/or humanoid enemies.
 ## 
