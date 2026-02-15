@@ -59,11 +59,13 @@ class Screen{
 		public int tics;
 		public Vector2 p1;
 		public Vector2 p2;
+		public Color col;
 		
-		public HitscanLine(Vector2 a,Vector2 b){
+		public HitscanLine(Vector2 a,Vector2 b,Color lcol){
 			p1 = a;
 			p2 = b;
-			tics = 15;
+			col = lcol;
+			tics = 10;
 			
 			Program.hscanLines.Add(this);
 		}
@@ -72,7 +74,7 @@ class Screen{
 		if(todraw.tics <= 0)
 			return;
 		DrawLineV(todraw.p1 - Program.playerObject.Camera,todraw.p2 - Program.playerObject.Camera,
-			new Color(0xff,0xaa,0x33,(int)(System.Math.Clamp(todraw.tics / 9.0f * 255.0f,0.0f,200.0f))));
+			new Color(todraw.col.R,todraw.col.G,todraw.col.B,(int)(System.Math.Clamp(todraw.tics / 4.0f * 255.0f,0.0f,200.0f))));
 	}
 	
 	//draw menu stuff

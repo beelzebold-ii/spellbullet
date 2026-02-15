@@ -28,7 +28,7 @@ class SB_Player:eObj{
 	//apparently empty constructors are still needed because the base constructor takes required arguments.
 	public SB_Player(float pox,float poy) : base(pox,poy){
 		SetSprite("player");
-		ReadyWeapon = new SubMachinegun(0.0f,0.0f);
+		ReadyWeapon = new Pistol9mm(0.0f,0.0f);
 		ReadyWeapon.AttachTo(this);
 	}
 	

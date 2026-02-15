@@ -21,6 +21,8 @@ abstract class Weapon:invObj{
 	public virtual bool cyclic => true;
 	//supposed base spread used only for drawing the spread cone in front of the player
 	public virtual double spread => 6.0f;
+	//what ammo the weapon reloads with/gives on unload
+	public abstract string AmmoClass{ get; }
 	
 	public Weapon(float pox,float poy,int cnt = 1) : base(pox,poy,cnt){
 		
@@ -28,7 +30,7 @@ abstract class Weapon:invObj{
 	
 	const float HITSCAN_MAXRANGE = 800.0f;
 	
-	protected void Hitscan(double angleofs,int damage,int wounds){
+	protected void Hitscan(double angleofs,int damage,int wounding){
 		//TraceLog(TraceLogLevel.Debug,"WEAPON: Fired Hitscan at angle offset " + angleofs + " with dmg/wound of " + damage + "/" + wounds);
 		
 		double lineangle = owner.angle + angleofs;
@@ -37,12 +39,11 @@ abstract class Weapon:invObj{
 		Vector2 p1 = owner.pos;
 		Vector2 p2 = p1 + (LineVec * HITSCAN_MAXRANGE);
 		
-		new Screen.HitscanLine(p1,p2);
+		new Screen.HitscanLine(p1,p2,new Color(0xff,0xaa,0x33,0xff));//default orange color
+		//new Screen.HitscanLine(p1,p2,new Color(0x44,0x44,0xaa,0xff));//weird fucked up blue color for fuckin around
+		//new Screen.HitscanLine(p1,p2,new Color(0x67,0x3a,0xb7,0xff));//undead zeratul's personal color???
 	}
-	protected void FireBullets(double basespread,int basedmg,int wounding = -1,float variation = 2.0f,int shotcount = 1){
-		if(wounding == -1)
-			wounding = (int)(basedmg / 2.0f);
-		
+	protected void FireBullets(double basespread,int basedmg,int wounding = 0,float variation = 2.0f,int shotcount = 1){
 		//increase spread with recoil
 		if(owner is SB_Player){
 			SB_Player pla = (SB_Player)owner;
@@ -78,6 +79,7 @@ class TestGun:Weapon{
 	public override double spread => 1.5f;
 	public override float Recoil => 1.5f;
 	public override float MaxRecoil => 50.0f;
+	public override string AmmoClass => "Ammo9mm";
 	
 	public TestGun(float pox,float poy,int cnt = -1) : base(pox,poy,cnt){
 		SetSprite("smsnb0");

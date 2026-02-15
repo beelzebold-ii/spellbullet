@@ -64,7 +64,7 @@ class Program{
 		
 		playerObject = new SB_Player(0.0f,0.0f);
 		
-		new TestGun(120.0f,-20.0f);
+		new SubMachinegun(120.0f,-20.0f);
 		new SB_TestEnemy(260.0f,0.0f);
 		
 		//main game loop

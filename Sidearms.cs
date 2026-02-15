@@ -15,9 +15,10 @@ class Pistol9mm:Weapon{
 	public override float Recovery => 0.1f;
 	public override double spread => 3.0f;
 	public override bool cyclic => false;
+	public override string AmmoClass => "Ammo9mm";
 	
 	public Pistol9mm(float pox,float poy,int cnt = -1) : base(pox,poy,cnt){
-		//SetSprite("smsnb0");
+		SetSprite("pista0");
 	}
 	
 	public override int Attack(){
@@ -27,7 +28,7 @@ class Pistol9mm:Weapon{
 		
 		count--;
 		PlaySound(AssetManager.Sounds["pistol"]);
-		FireBullets(spread,15,10);
+		FireBullets(spread,15,3);
 		
 		ApplyRecoil();
 		
@@ -44,6 +45,7 @@ class Revolver:Weapon{
 	public override float Recovery => 0.16f;
 	public override double spread => 2.0f;
 	public override bool cyclic => false;
+	public override string AmmoClass => "Ammo35";
 	
 	public Revolver(float pox,float poy,int cnt = -1) : base(pox,poy,cnt){
 		//SetSprite("smsnb0");
@@ -56,7 +58,7 @@ class Revolver:Weapon{
 		
 		count--;
 		PlaySound(AssetManager.Sounds["pistol"]);
-		FireBullets(spread,25,20,1.5f);
+		FireBullets(spread,25,5,1.5f);
 		
 		ApplyRecoil();
 		
