@@ -38,6 +38,8 @@ abstract class Input{
 	public static ActionBind Inv = new ActionBind(KeyboardKey.E,GamepadButton.MiddleLeft);
 	//bind for firing weapon
 	public static ActionBind Fire = new ActionBind(KeyboardKey.Null,GamepadButton.RightTrigger2,(int)MouseButton.Left);
+	//bind for reloading weapon
+	public static ActionBind Reload = new ActionBind(KeyboardKey.R,GamepadButton.RightFaceLeft);
 	
 	//action binds
 	public static bool CheckActionBind(ActionBind bind,bool hold = false){

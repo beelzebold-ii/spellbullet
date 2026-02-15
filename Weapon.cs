@@ -9,6 +9,9 @@ namespace Spellbullet;
 // base class for weapons
 //~=======================~
 abstract class Weapon:invObj{
+	//weapons won't consolidate into each other
+	protected override bool CanConsolidate => false;
+	
 	//how much recoil this weapon incurs per shot
 	//recoil is essentially just a multiplier for spread
 	public virtual float Recoil => 2.25f;
@@ -70,6 +73,48 @@ abstract class Weapon:invObj{
 	
 	//returns the delay until the next attack will occur
 	public abstract int Attack();
+	
+	//actually reload the gun if possible; returns one of a few statuses - 0 (failed), 1 (from partial), 2 (from empty)
+	protected int DoReload(){
+		if(count >= maxCount){
+			return 0;
+		}
+		int oldcount = count;
+		
+		//array of empty invObjs to remove
+		List<invObj> emptyObjs = new List<invObj>() { };
+		//start from the end of the list to maintain consolidation
+		for(int i=owner.Inventory.Count-1;i>=0;i--){
+			invObj thisitem = owner.Inventory[i];
+			if(thisitem.GetType().Name == AmmoClass){
+				TraceLog(TraceLogLevel.Debug,"WEAPON: Reload found valid item");
+				int diff = System.Math.Min(maxCount - count,thisitem.count);
+				thisitem.count -= diff;
+				count += diff;
+				
+				if(thisitem.count <= 0)
+					emptyObjs.Add(thisitem);
+				
+				if(count >= maxCount)
+					break;
+			}
+		}
+		
+		foreach(invObj iii in emptyObjs){
+			owner.Inventory.Remove(iii);
+		}
+		
+		if(oldcount == count)
+			return 0;
+		if(oldcount == 0)
+			return 2;
+		return 1;
+	}
+	//attempt to reload; returns the time it takes to reload
+	//this default just returns tics based on the status result of DoReload
+	public virtual int Reload(){
+		return DoReload();
+	}
 }
 
 // and a test weapon

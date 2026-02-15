@@ -64,7 +64,11 @@ class Program{
 		
 		playerObject = new SB_Player(0.0f,0.0f);
 		
+		playerObject.GiveInventory("Ammo9mm",30);
+		
 		new SubMachinegun(120.0f,-20.0f);
+		new Ammo9mm(120.0f,-100.0f,30);
+		new Ammo9mm(120.0f,60.0f,90);
 		new SB_TestEnemy(260.0f,0.0f);
 		
 		//main game loop

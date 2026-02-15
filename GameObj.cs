@@ -214,6 +214,7 @@ abstract class invObj:gObj{
 	//the displayed name of the item
 	protected virtual string tag => "";
 	public string Tag{ get => tag; }
+	protected virtual bool CanConsolidate => true;
 	
 	//whether or not the item is attached to an object's inventory
 	protected bool attached = false;
@@ -227,6 +228,25 @@ abstract class invObj:gObj{
 		owner.Inventory.Add(this);
 		
 		Program.UnlinkObject(this);
+		
+		//attempt to consolidate to an existing slot with this item
+		if(CanConsolidate){
+			foreach(invObj other in owner.Inventory){
+				if(other == this)
+					continue;
+				if(other.GetType() == this.GetType()){
+					if(other.count >= other.maxCount)
+						continue;
+					int diff = System.Math.Min(other.maxCount - other.count,count);
+					other.count += diff;
+					count -= diff;
+				}
+			}
+			
+			//destroy if empty
+			if(count <= 0)
+				owner.Inventory.Remove(this);
+		}
 	}
 	
 	//how many of the item?

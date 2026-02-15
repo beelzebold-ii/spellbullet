@@ -71,6 +71,12 @@ class SB_Player:eObj{
 				fireDelay = ReadyWeapon.Attack();
 			}
 		}
+		//RELOAD WEAPON
+		if(ReadyWeapon != null && fireDelay <= 0){
+			if(Input.CheckActionBind(Input.Reload)){
+				fireDelay = ReadyWeapon.Reload();
+			}
+		}
 		
 		//PICKUP FROM GROUND
 		if(Input.CheckActionBind(Input.Grab)){

@@ -45,7 +45,12 @@ class Screen{
 			//txtpos = o.pos; //for debugging
 			txtpos = Vector2.Round(txtpos - Program.playerObject.Camera);
 			
-			DrawText("" + ((invObj)o).Tag,(int)txtpos.X,(int)txtpos.Y,10,Color.RayWhite);
+			invObj invo = (invObj)o;
+			if(o is Weapon){
+				DrawText("" + ((invObj)o).Tag + " (" + invo.count + "/" + invo.maxCount + ")",(int)txtpos.X,(int)txtpos.Y,10,Color.RayWhite);
+			}else{
+				DrawText("" + ((invObj)o).Tag + " (" + invo.count + ")",(int)txtpos.X,(int)txtpos.Y,10,Color.RayWhite);
+			}
 		}
 		
 		//draw collision radius if o is eObj
