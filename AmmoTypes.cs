@@ -1,7 +1,7 @@
 namespace Spellbullet;
 
 class Ammo9mm:Ammo{
-	public override int maxCount => 90;
+	public override int maxCount => 60;
 	protected override string tag => "9mm ammo";
 	
 	public Ammo9mm(float pox,float poy,int cnt = -1):base(pox,poy,cnt){
@@ -9,7 +9,7 @@ class Ammo9mm:Ammo{
 	}
 }
 class Ammo35:Ammo{
-	public override int maxCount => 60;
+	public override int maxCount => 40;
 	protected override string tag => ".35 ammo";
 	
 	public Ammo35(float pox,float poy,int cnt = -1):base(pox,poy,cnt){
@@ -17,7 +17,7 @@ class Ammo35:Ammo{
 	}
 }
 class Ammo12g:Ammo{
-	public override int maxCount => 15;
+	public override int maxCount => 10;
 	protected override string tag => "12 gauge ammo";
 	
 	public Ammo12g(float pox,float poy,int cnt = -1):base(pox,poy,cnt){

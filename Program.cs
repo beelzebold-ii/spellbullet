@@ -66,7 +66,9 @@ class Program{
 		
 		new SubMachinegun(120.0f,-20.0f);
 		new Ammo9mm(120.0f,-100.0f,30);
-		new Ammo9mm(120.0f,60.0f,90);
+		new Ammo9mm(120.0f,-140.0f,10);
+		new Ammo9mm(120.0f,60.0f,60);
+		new Ammo9mm(120.0f,100.0f,20);
 		new SB_TestEnemy(260.0f,0.0f);
 		
 		//main game loop
@@ -129,12 +131,20 @@ class Program{
 				}
 				//draw PLAYER
 				Screen.DrawObject(playerObject);
+				//draw ACTION TIMER
+				if(playerObject.actionTimer > 0){
+					Vector2 circlev = playerObject.pos - playerObject.Camera - new Vector2(0.0f, 35.0f);
+					DrawCircleSector(circlev,
+						7.0f,-90.0f,
+						(playerObject.actionTimer / (float)playerObject.maxActionTimer) * -360.0f - 90.0f,
+						24,Color.Red);
+					DrawCircleLines((int)circlev.X,(int)circlev.Y,8.0f,Color.RayWhite);
+				}
 				
 				//draw PAIN VIGNETTE
 				SetShaderValue(Screen.vignetteShader,Screen.vignettePain,
 					playerObject.pain/(float)(playerObject.spawnHealth) + (float)(System.Math.Sin(GetTime()*3.14))/20.0f,
 					ShaderUniformDataType.Float);
-				//SetShaderValue(Screen.vignetteShader,Screen.vignettePain,(float)(System.Math.Sin(GetTime()))/2.0f+0.5f,ShaderUniformDataType.Float);
 				SetShaderValue(Screen.vignetteShader,Screen.vignetteRes,new Vector2(800.0f,450.0f),ShaderUniformDataType.Vec2);
 				BeginShaderMode(Screen.vignetteShader);
 				
@@ -166,7 +176,14 @@ class Program{
 			BeginTextureMode(Screen.ScreenCanvas[1]);
 			Screen.Flip(0,false);
 			EndTextureMode();
+			//apply STUN DESATURATION
+			SetShaderValue(Screen.desatShader,Screen.desatStun,
+				playerObject.stun/(float)(playerObject.spawnHealth),
+				ShaderUniformDataType.Float);
+			//SetShaderValue(Screen.desatShader,Screen.desatStun,0.0f,ShaderUniformDataType.Float);
+			BeginShaderMode(Screen.desatShader);
 			Screen.Flip(1);
+			EndShaderMode();
 			EndDrawing();
 		}
 		

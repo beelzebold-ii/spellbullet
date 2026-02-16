@@ -152,5 +152,24 @@ class InventoryMenu:MenuScreen{
 		if(Program.playerObject.Inventory.Count>i)
 			item = Program.playerObject.Inventory[i];
 		DrawInvSlot(ButtonPos,item);
+		//row 3
+		ButtonPos = new Vector2(60.0f,210.0f);
+		i = 6;
+		item = null;
+		if(Program.playerObject.Inventory.Count>i)
+			item = Program.playerObject.Inventory[i];
+		DrawInvSlot(ButtonPos,item);
+		ButtonPos = new Vector2(185.0f,210.0f);
+		i = 7;
+		item = null;
+		if(Program.playerObject.Inventory.Count>i)
+			item = Program.playerObject.Inventory[i];
+		DrawInvSlot(ButtonPos,item);
+		ButtonPos = new Vector2(310.0f,210.0f);
+		i = 8;
+		item = null;
+		if(Program.playerObject.Inventory.Count>i)
+			item = Program.playerObject.Inventory[i];
+		DrawInvSlot(ButtonPos,item);
 	}
 }

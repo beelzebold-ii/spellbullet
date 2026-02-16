@@ -18,13 +18,18 @@ class SB_Player:eObj{
 	
 	public float stamina = 100.0f;
 	
+	//item stuff
 	public const float PickupRange = 32.0f;
-	public const int MaxInventory = 6;
+	public const int MaxInventory = 9;
 	
 	//weapon stuff
 	public Weapon ReadyWeapon = null;
 	public int fireDelay = 0;
 	public float recoil = 0.0f;
+	
+	//action timer is used by reloading or using other items for the timer animation
+	public int maxActionTimer = 0;
+	public int actionTimer = 0;
 	
 	//camera position (absolute)
 	protected Vector2 camera = Vector2.Zero;
@@ -71,6 +76,8 @@ class SB_Player:eObj{
 		//this means if you hit 75% base stun (~1.8 liters of bloodloss) you are most likely going to die
 		if(stunRatio >= 0.75f)
 			regenStamina *= 2.0f;
+		stamina += regenStamina;
+		stamina = System.Math.Clamp(stamina,-5.0f,maxStamina);
 		
 		Vector2 MoveVec = Input.GetMovementVector();
 		if(stun > 20)
@@ -85,6 +92,10 @@ class SB_Player:eObj{
 		//TURN TOWARDS MOUSE
 		angle = Input.GetAimAngle();
 		NormalizeAngle();
+		
+		//REDUCE ACTION TIMER
+		if(actionTimer > 0)
+			actionTimer--;
 		
 		//HANDLE WEAPON DELAY AND RECOIL
 		if(fireDelay > 0)
@@ -118,6 +129,8 @@ class SB_Player:eObj{
 		if(ReadyWeapon != null && fireDelay <= 0){
 			if(Input.CheckActionBind(Input.Reload)){
 				fireDelay = (int)(ReadyWeapon.Reload() * (1.0f + painRatio * 1.5f));
+				actionTimer = fireDelay;
+				maxActionTimer = actionTimer;
 			}
 		}
 		

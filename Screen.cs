@@ -13,6 +13,9 @@ class Screen{
 	public static Shader vignetteShader = LoadShader(null,"Vignette.gl");
 	public static int vignettePain = GetShaderLocation(vignetteShader,"pain");
 	public static int vignetteRes = GetShaderLocation(vignetteShader,"resolution");
+	public static Shader desatShader = LoadShader(null,"Desaturate.gl");
+	public static int desatStun = GetShaderLocation(desatShader,"stun");
+	//public static int desatTex = GetShaderLocation(desatShader,"texture0");
 	
 	public static void Init(){
 		TraceLog(TraceLogLevel.Debug,"SCREEN: Init RenderTextures");

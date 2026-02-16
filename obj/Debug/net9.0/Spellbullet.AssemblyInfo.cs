@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Spellbullet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cde2d57fe05477ec9a964d1fcbef2f75d533bf26")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b55e966bdc412952366ce19ab5ebf402626085f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Spellbullet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Spellbullet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

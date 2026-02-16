@@ -11,7 +11,7 @@ namespace Spellbullet;
 abstract class gObj{
 	//age of the object
 	private int age = 0;
-	public int Age{ get; }
+	public int Age{ get => age; }
 	
 	//friction coefficient
 	const float GLOBAL_FRICTION = 0.85f;
@@ -126,10 +126,6 @@ abstract class eObj:gObj{
 	//constructor for eObjs; hopefully constructors for subclasses are not necessary, but if they are, all should be well
 	public eObj(float pox,float poy) : base(pox,poy){
 		objhp = spawnHealth;
-		if(!isPlayer)
-			bloodVol = spawnHealth/40.0f;//100hp = 2.5l of blood
-		else
-			bloodVol = spawnHealth/20.0f;//100hp = 5.0l of blood
 	}
 	
 	//and our ticker function
@@ -138,6 +134,37 @@ abstract class eObj:gObj{
 		DoObjectCollision();
 		
 		base.Tick();
+		
+		//bleedout
+		if(Age%60 == 0){
+			List<int> EmptyWounds = new List<int>() { };
+			
+			int i = 0;
+			foreach(int wound in BleedingWounds){
+				if(wound <= 0){
+					EmptyWounds.Add(wound);
+					continue;
+				}
+				bloodVol -= wound * 0.00025f;//0.25ml/s per wound size
+				bloodVol -= 0.0002f;//0.2ml/s extra per open wound
+				//this means 100 total woundsize spead over 5 wounds = 26ml/s
+				//100 total woundsize spread over 10 wounds = 27ml/s
+				//this extra effect is relatively small so it doesn't really matter
+				//unless you suddenly get 12 really small wounds from buckshot ig
+				
+				//enemies passively heal their wounds fairly quickly
+				//1/2 of all open wounds heal at a rate of 1/sec
+				if(i%2 == 0 && !isPlayer){
+					BleedingWounds[i]--;
+				}
+				
+				i++;
+			}
+			
+			foreach(int wound in EmptyWounds){
+				BleedingWounds.Remove(wound);
+			}
+		}
 	}
 	
 	//method for killing the object
@@ -151,9 +178,54 @@ abstract class eObj:gObj{
 		if(!isDead)
 			return;
 		if(reshealth==-1)
-			reshealth = spawnHealth;
+			reshealth = health;
 		isdead = false;
 		objhp = reshealth;
+	}
+	
+	//damage types
+	public enum damageType{
+		DAMAGE_GUNSHOT,
+		DAMAGE_MAGIC,
+		DAMAGE_FIRE,
+		DAMAGE_BLAST
+	}
+	//method for dealing damage of a specific type to an object
+	public virtual void DamageEObj(int dmg,damageType modifier,int extra){
+		switch(modifier){
+			default:
+				health -= dmg + extra;
+				break;
+			case damageType.DAMAGE_GUNSHOT:
+				//healthkills from gunshots are not very common
+				//slight flat bonus to this since many small pellets (ie a shotgun blast) would mangle you very badly
+				health -= (int)(dmg / 1.5f) + 3;
+				//pain increases with diminishing returns, getting shot HURTS but getting shot with a bigger bullet mainly just kills you faster
+				pain += (int)System.Math.Pow((double)dmg,0.8f);
+				//stun per shot increases when you're already in serious pain
+				stun += dmg / 2 + (int)System.Math.Sqrt(pain);
+				//wounding increases progressively faster as damage increases linearly
+				//slight flat penalty to this to simulate something like a really small
+				//wound channel not bleeding very fast
+				int woundsize = GetRandomValue((int)(dmg * 0.8), dmg + (int)(dmg * dmg * 0.01)) - 3;
+				//no negative wounds!!!!
+				//50% chance that if a wound would be superficial and disappear it will still be there minorly
+				woundsize = System.Math.Max(GetRandomValue(0,1), woundsize);
+				//if the wound is so small that it'd cause no bleeding, we won't add it
+				if(woundsize + extra > 0)
+					BleedingWounds.Add(woundsize + extra);
+				break;
+			case damageType.DAMAGE_MAGIC:
+				health -= dmg;
+				pain += dmg;
+				stun += dmg/2 + extra;
+				break;
+			case damageType.DAMAGE_FIRE:
+				health -= dmg;
+				pain += dmg*2;
+				stun += dmg*2;
+				break;
+		}
 	}
 	
 	//virtual method called to notify the object when it takes damage

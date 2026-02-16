@@ -47,7 +47,7 @@ abstract class Weapon:invObj{
 		//new Screen.HitscanLine(p1,p2,new Color(0x44,0x44,0xaa,0xff));//weird fucked up blue color for fuckin around
 		//new Screen.HitscanLine(p1,p2,new Color(0x67,0x3a,0xb7,0xff));//undead zeratul's personal color???
 	}
-	protected void FireBullets(double basespread,int basedmg,int wounding = 0,float variation = 2.0f,int shotcount = 1){
+	protected void FireBullets(double basespread,int basedmg,int wounding = 0,float variation = 1.5f,int shotcount = 1){
 		//increase spread with recoil
 		if(owner is SB_Player){
 			SB_Player pla = (SB_Player)owner;

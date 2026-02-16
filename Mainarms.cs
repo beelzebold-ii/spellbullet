@@ -37,13 +37,13 @@ class SubMachinegun:Weapon{
 		switch(DoReload()){
 			default:
 			case 0:
-				return 1;
+				return 0;
 				break;
 			case 1:
-				return 27;
+				return 30;
 				break;
 			case 2:
-				return 45;
+				return 40;
 				break;
 		}
 	}

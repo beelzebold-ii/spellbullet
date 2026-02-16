@@ -38,13 +38,13 @@ class Pistol9mm:Weapon{
 		switch(DoReload()){
 			default:
 			case 0:
-				return 1;
+				return 0;
 				break;
 			case 1:
 				return 25;
 				break;
 			case 2:
-				return 40;
+				return 45;
 				break;
 		}
 	}
@@ -79,16 +79,14 @@ class Revolver:Weapon{
 		return 10;//535r/m;6r/s
 	}
 	public override int Reload(){
+		int reltime = maxCount - count * 8 + 4;
 		switch(DoReload()){
-			default:
 			case 0:
-				return 1;
+				return 0;
 				break;
+			default:
 			case 1:
-				return 45;
-				break;
-			case 2:
-				return 50;
+				return reltime;
 				break;
 		}
 	}
