@@ -104,7 +104,6 @@ class SB_Player:eObj{
 		}
 		
 		base.Tick();
-		stun = 50;
 		
 		
 		//ACTION INPUT HANDLING
