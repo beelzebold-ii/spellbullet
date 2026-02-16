@@ -64,8 +64,6 @@ class Program{
 		
 		playerObject = new SB_Player(0.0f,0.0f);
 		
-		playerObject.GiveInventory("Ammo9mm",30);
-		
 		new SubMachinegun(120.0f,-20.0f);
 		new Ammo9mm(120.0f,-100.0f,30);
 		new Ammo9mm(120.0f,60.0f,90);
@@ -131,6 +129,18 @@ class Program{
 				}
 				//draw PLAYER
 				Screen.DrawObject(playerObject);
+				
+				//draw PAIN VIGNETTE
+				SetShaderValue(Screen.vignetteShader,Screen.vignettePain,
+					playerObject.pain/(float)(playerObject.spawnHealth) + (float)(System.Math.Sin(GetTime()*3.14))/20.0f,
+					ShaderUniformDataType.Float);
+				//SetShaderValue(Screen.vignetteShader,Screen.vignettePain,(float)(System.Math.Sin(GetTime()))/2.0f+0.5f,ShaderUniformDataType.Float);
+				SetShaderValue(Screen.vignetteShader,Screen.vignetteRes,new Vector2(800.0f,450.0f),ShaderUniformDataType.Vec2);
+				BeginShaderMode(Screen.vignetteShader);
+				
+				DrawRectangle(0,0,800,450,Color.Red);
+				
+				EndShaderMode();
 				
 				// THE HEADS UP DISPLAY
 				//~=====================~

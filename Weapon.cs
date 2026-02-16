@@ -32,6 +32,7 @@ abstract class Weapon:invObj{
 	}
 	
 	const float HITSCAN_MAXRANGE = 800.0f;
+	const double WEAPON_PAINACC = 12.0d;
 	
 	protected void Hitscan(double angleofs,int damage,int wounding){
 		//TraceLog(TraceLogLevel.Debug,"WEAPON: Fired Hitscan at angle offset " + angleofs + " with dmg/wound of " + damage + "/" + wounds);
@@ -53,6 +54,9 @@ abstract class Weapon:invObj{
 			TraceLog(TraceLogLevel.Debug,"WEAPON: Attack with recoil " + pla.recoil);
 			basespread *= 1.0d + pla.recoil;
 		}
+		//increase spread with pain
+		float painRatio = owner.pain / (float)owner.spawnHealth;
+		basespread += painRatio * WEAPON_PAINACC;
 		
 		int roundedspread = (int)(basespread * 10);
 		int maxdmg = (int)(basedmg * variation);

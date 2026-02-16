@@ -10,10 +10,15 @@ namespace Spellbullet;
 class Screen{
 	public static RenderTexture2D[] ScreenCanvas = new RenderTexture2D[] { new RenderTexture2D(), new RenderTexture2D() };
 	
+	public static Shader vignetteShader = LoadShader(null,"Vignette.gl");
+	public static int vignettePain = GetShaderLocation(vignetteShader,"pain");
+	public static int vignetteRes = GetShaderLocation(vignetteShader,"resolution");
+	
 	public static void Init(){
 		TraceLog(TraceLogLevel.Debug,"SCREEN: Init RenderTextures");
 		ScreenCanvas[0] = LoadRenderTexture(800,450);
 		ScreenCanvas[1] = LoadRenderTexture(800,450);
+		
 	}
 	public static void DeInit(){
 		TraceLog(TraceLogLevel.Debug,"SCREEN: De-Init RenderTextures");

@@ -79,6 +79,9 @@ abstract class gObj{
 // base class for "living" entities of any kind
 //~=============================================~
 abstract class eObj:gObj{
+	//self explanatory
+	public virtual bool isPlayer => false;
+	
 	//objhp is private, health is a property that will kill the eObj if it drops to zero
 	private int objhp;
 	public int health{
@@ -90,16 +93,27 @@ abstract class eObj:gObj{
 			objhp = value;
 			if(objhp <= 0){
 				Die();
-			}else{
-				isdead = false;
 			}
 		}
 	}
+	
+	//how much blood the object has in its body in liters
+	//maximum is determined from spawnhealth with the exception of the player
+	protected float bloodVol;
+	//open wounds that may be losing blood, temporarily patched, or permanently sealed and healing
+	protected List<int> BleedingWounds = new List<int>() { };
+	protected List<int> PatchedWounds = new List<int>() { };
+	protected List<int> SealedWounds = new List<int>() { };
+	//stun hinders movement and attacking; pain hinders accuracy
+	public int stun = 0;
+	public int pain = 0;
+	
 	//the health that the object should spawn with; read only and overridden in subclasses
 	public abstract int spawnHealth{ get; }
 	//whether or not the object is dead or not (rather self explanatory)
 	private bool isdead = false;
 	public bool isDead{ get => isdead; }
+	
 	
 	//the radius of the object, used for collisions. duh.
 	public abstract float radius{ get; }
@@ -112,6 +126,10 @@ abstract class eObj:gObj{
 	//constructor for eObjs; hopefully constructors for subclasses are not necessary, but if they are, all should be well
 	public eObj(float pox,float poy) : base(pox,poy){
 		objhp = spawnHealth;
+		if(!isPlayer)
+			bloodVol = spawnHealth/40.0f;//100hp = 2.5l of blood
+		else
+			bloodVol = spawnHealth/20.0f;//100hp = 5.0l of blood
 	}
 	
 	//and our ticker function
@@ -126,7 +144,6 @@ abstract class eObj:gObj{
 	public virtual void Die(){
 		if(isDead)
 			return;
-		objhp = 0;
 		isdead = true;
 	}
 	//method for UnKilling the object

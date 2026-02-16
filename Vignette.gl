@@ -1,0 +1,28 @@
+#version 330
+
+in vec2 fragTexCoord;
+in vec4 fragColor;
+
+out vec4 finalColor;
+
+uniform float pain;
+uniform vec2 resolution;
+
+void main(){
+	vec2 uv = gl_FragCoord.xy / resolution;
+	
+	uv -= vec2(0.5,0.5);
+	uv.x *= resolution.x / resolution.y;
+	//still sort of elipsoid
+	uv.y *= 1.3;
+	
+	float dist = length(uv);
+	//inner edge of the vignette gradient
+	float radius = mix(1.1,-0.1,pain);
+	//distance from the inner edge to the outer edge (beyond which is 100% opaque)
+	float softness = mix(0.35,0.85,pain);
+	
+	float vignetteStr = smoothstep(radius, radius + softness, dist);
+	
+	finalColor = vec4(fragColor.r, fragColor.g, fragColor.b, vignetteStr);
+}
